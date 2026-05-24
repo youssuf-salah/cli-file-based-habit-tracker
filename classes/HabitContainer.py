@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Habit import Habit
+from classes.Habit import Habit
 
 @dataclass
 class HabitContainer:
