@@ -5,7 +5,7 @@ This is my first no-tutorial Python project. The goal is not perfection — the 
 
 ---
 
-## 🎯 Objective
+# 🎯 Objective
 
 Track habits using CSV files and monitor consistency through streak systems.
 
@@ -44,15 +44,13 @@ Represents a single habit.
 | `target`  | `float` | Daily target amount                        |
 | `unit`    | `str`   | Measurement unit (hours, reps, cups, etc.) |
 
+---
+
 ### Methods
 
 #### `Habit.set_title(new_title: str) -> Habit`
 
 Updates the habit title and automatically regenerates the slug.
-
-```py
-habit.set_title("Read Books")
-```
 
 ---
 
@@ -60,19 +58,11 @@ habit.set_title("Read Books")
 
 Updates the habit target.
 
-```py
-habit.set_target(2)
-```
-
 ---
 
 #### `Habit.set_unit(new_unit: str) -> Habit`
 
 Updates the habit measurement unit.
-
-```py
-habit.set_unit("hours")
-```
 
 ---
 
@@ -125,18 +115,6 @@ Saves all habits from memory into a CSV file.
 
 Prints all habits in a readable CLI format.
 
-Example output:
-
-```txt
-|==============|
-|=== Habits ===|
-|==============|
-
-- Title: Workout
-- Target: x50 reps
------------------------
-```
-
 ---
 
 ### Example
@@ -155,7 +133,7 @@ container.save_to_csv("./habits.csv")
 
 ## 3. HabitProgress
 
-Tracks streaks and consistency progress.
+Tracks streaks and consistency progress for a single habit.
 
 ### Attributes
 
@@ -205,7 +183,7 @@ Effects:
 
 #### `HabitProgress.load_from_container(streak: dict, last_updated: datetime)`
 
-Loads saved streak data and automatically updates missed days based on time difference.
+Loads saved streak data and automatically updates missed days based on the time difference.
 
 Example:
 
@@ -237,6 +215,102 @@ Possible output:
 
 ---
 
+## 4. ProgressContainer
+
+Stores and manages progress data for all habits.
+
+---
+
+### Internal Structure
+
+```py
+[
+    {
+        "slug": "habit-slug",
+        "streak": {
+            "current_chain_streak": int,
+            "current_break_streak": int,
+            "max_chain_streak": int,
+            "max_break_streak": int
+        },
+        "last_updated": datetime
+    }
+]
+```
+
+---
+
+### Attributes
+
+| Attribute   | Type         | Description                                |
+| ----------- | ------------ | ------------------------------------------ |
+| `container` | `list[dict]` | List containing all habit progress records |
+
+---
+
+### Methods
+
+#### `ProgressContainer.import_from_csv(csv_path: str) -> ProgressContainer`
+
+Loads progress records from a CSV file.
+
+Expected CSV format:
+
+```csv
+slug,current_chain_streak,max_chain_streak,current_break_streak,max_break_streak,last_updated
+workout,5,10,0,2,2026-05-24 12:30:00
+```
+
+---
+
+#### `ProgressContainer.write_to_csv(csv_path: str) -> ProgressContainer`
+
+Saves all progress records into a CSV file.
+
+---
+
+#### `ProgressContainer.print_progress() -> None`
+
+Prints all progress records in a readable CLI format.
+
+Example output:
+
+```txt
+|================|
+|=== Progress ===|
+|================|
+
+Workout
+    Streak: 5              |   Best Streak: 10
+    Break Streak: 0        |   Longest Break Streak: 2
+    Last Updated At: 2026-05-24 12:30:00
+-----------------------
+```
+
+---
+
+#### `ProgressContainer.print_progress_by_slug(slug: str) -> None`
+
+Prints progress data for a specific habit using its slug.
+
+---
+
+### Example
+
+```py
+progress_container = ProgressContainer()
+
+progress_container.import_from_csv("./progress.csv")
+
+progress_container.print_progress()
+
+progress_container.print_progress_by_slug("workout")
+
+progress_container.write_to_csv("./progress.csv")
+```
+
+---
+
 # 🗂 Current Project Structure
 
 ```txt
@@ -245,9 +319,36 @@ project/
 ├── classes/
 │   ├── Habit.py
 │   ├── HabitContainer.py
-│   └── HabitProgress.py
+│   ├── HabitProgress.py
+│   └── ProgressContainer.py
+│
+├── habits.csv
+├── progress.csv
 │
 └── main.py
+```
+
+---
+
+# 📄 CSV Structures
+
+## habits.csv
+
+```csv
+title,target,unit
+Workout,50,reps
+Reading,2,hours
+Meditation,15,minutes
+```
+
+---
+
+## progress.csv
+
+```csv
+slug,current_chain_streak,max_chain_streak,current_break_streak,max_break_streak,last_updated
+workout,5,12,0,3,2026-05-24 12:30:00
+reading,2,7,0,4,2026-05-24 12:30:00
 ```
 
 ---
@@ -264,20 +365,26 @@ project/
 - [x] Track break streaks
 - [x] Track maximum streaks
 - [x] Auto-detect missed days
+- [x] Save progress to CSV
+- [x] Load progress from CSV
+- [x] Print all progress records
+- [x] Print progress by habit slug
 
 ---
 
 # 🚧 Planned Features
 
 - [ ] Interactive CLI menu
-- [ ] Habit completion logging
-- [ ] Multiple habit progress tracking
-- [ ] Better CSV structure
-- [ ] Persistent streak storage
-- [ ] Statistics system
+- [ ] Mark habits as done directly from CLI
+- [ ] Better CSV parsing using Python's `csv` module
+- [ ] Better exception handling
+- [ ] Data validation
+- [ ] Statistics dashboard
 - [ ] Colored terminal output
+- [ ] Persistent auto-sync system
 - [ ] Unit tests
-- [ ] Better error handling
+- [ ] JSON support
+- [ ] SQLite support
 
 ---
 
@@ -289,8 +396,10 @@ Through this project I'm practicing:
 - File handling
 - CSV processing
 - Dataclasses
+- CLI application architecture
 - State management
-- CLI application structure
+- Time/date handling
+- Data persistence
 - Clean code organization
 - Problem solving without tutorials
 
@@ -305,8 +414,5 @@ The focus is:
 - consistency
 - experimentation
 - learning through mistakes
-- improving project structure over time
-
-```
-
-```
+- improving structure gradually
+- understanding how real projects evolve over time
