@@ -379,12 +379,8 @@ reading,2,7,0,4,2026-05-24 12:30:00
 - [ ] Better CSV parsing using Python's `csv` module
 - [ ] Better exception handling
 - [ ] Data validation
-- [ ] Statistics dashboard
 - [ ] Colored terminal output
 - [ ] Persistent auto-sync system
-- [ ] Unit tests
-- [ ] JSON support
-- [ ] SQLite support
 
 ---
 
