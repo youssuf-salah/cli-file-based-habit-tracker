@@ -23,6 +23,10 @@ class HabitContainer:
       print(f"Can't find file in {csv_path}")
       exit(1)
   
+  def add_habit(self: "HabitContainer", habit: Habit) -> "HabitContainer":
+    self.habits_list.append(habit)
+    return self
+
   def save_to_csv(self: "HabitContainer", csv_path: str) -> None:
     try:
       with open(csv_path, "w", encoding="utf-8") as f:
